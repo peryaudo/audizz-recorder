@@ -3,6 +3,7 @@ package com.audizz.cordova.recorder;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.util.Log;
+import android.view.WindowManager;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
@@ -65,9 +66,13 @@ public class AudizzRecorderPlugin extends CordovaPlugin {
 			Log.d("AudizzRecorderPlugin", "MediaRecorder Error: Can't prepare.");
 			return;
 		}
+
+		this.cordova.getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 	}
 
 	public byte[] stop(String id) {
+		this.cordova.getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
 		MediaRecorder recorder = recorders.get(id);
 		if (recorder == null) {
 			return null;
