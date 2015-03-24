@@ -12,12 +12,15 @@ import org.json.JSONException;
 import java.util.HashMap;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.io.File;
 
 public class AudizzRecorderPlugin extends CordovaPlugin {
 	HashMap<String, MediaRecorder> recorders;
+	HashMap<String, String> temps;
 
 	public AudizzRecorderPlugin() {
 		this.recorders = new HashMap<String, MediaRecorder>();
+		this.temps = new HashMap<String, String>();
 	}
 
 	@Override
@@ -44,9 +47,12 @@ public class AudizzRecorderPlugin extends CordovaPlugin {
 
 		recorders.put(id, recorder);
 
+		String temporaryFileName = generateTemporaryFileName();
+		temps.put(id, temporaryFileName);
+
 		recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
 		recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-		recorder.setOutputFile("tmp.m4a");
+		recorder.setOutputFile(temporaryFileName);
 		recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
 		recorder.setAudioEncodingBitRate(96000);
 		recorder.setAudioSamplingRate(44100);
@@ -73,7 +79,7 @@ public class AudizzRecorderPlugin extends CordovaPlugin {
 
 		byte[] content = null;
 		try {
-			RandomAccessFile file = new RandomAccessFile("tmp.m4a", "r");
+			RandomAccessFile file = new RandomAccessFile(temps.get(id), "r");
 			content = new byte[(int) file.length()];
 			file.read(content);
 			file.close();
@@ -90,5 +96,12 @@ public class AudizzRecorderPlugin extends CordovaPlugin {
 			return (float)0.0;
 		}
 		return (float)recorder.getMaxAmplitude();
+	}
+
+	private String generateTemporaryFileName() {
+		return new File(
+			this.cordova.getActivity().getApplicationContext().getFilesDir(),
+			"record" + System.currentTimeMillis() + ".m4a"
+		).getPath();
 	}
 }
