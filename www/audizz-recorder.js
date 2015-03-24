@@ -1,17 +1,16 @@
 var utils = require('cordova/utils'),
     exec = require('cordova/exec');
 
-function AudizzRecorder(src) {
+function AudizzRecorder() {
   this.id = utils.createUUID();
-  this.src = src;
 }
 
 AudizzRecorder.prototype.start = function start() {
-  exec(null, null, 'AudizzRecorderPlugin', 'start', [this.id, this.src]);
+  exec(null, null, 'AudizzRecorderPlugin', 'start', [this.id]);
 };
 
-AudizzRecorder.prototype.stop = function stop() {
-  exec(null, null, 'AudizzRecorderPlugin', 'stop', [this.id]);
+AudizzRecorder.prototype.stop = function stop(success) {
+  exec(success, null, 'AudizzRecorderPlugin', 'stop', [this.id]);
 };
 
 AudizzRecorder.prototype.getLevel = function getLevel(success) {
