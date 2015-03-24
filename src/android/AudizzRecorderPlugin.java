@@ -67,11 +67,19 @@ public class AudizzRecorderPlugin extends CordovaPlugin {
 			return;
 		}
 
-		this.cordova.getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		this.cordova.getActivity().runOnUiThread(new Runnable() {
+			public void run() {
+				AudizzRecorderPlugin.this.cordova.getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+			}
+		});
 	}
 
 	public byte[] stop(String id) {
-		this.cordova.getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		this.cordova.getActivity().runOnUiThread(new Runnable() {
+			public void run() {
+				AudizzRecorderPlugin.this.cordova.getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+			}
+		});
 
 		MediaRecorder recorder = recorders.get(id);
 		if (recorder == null) {
