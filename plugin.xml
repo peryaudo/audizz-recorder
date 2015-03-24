@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugin
+	xmlns="http://apache.org/cordova/ns/plugins/1.0"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	id="com.audizz.cordova.recorder"
+	version="0.1.0">
+	<name>audizz-recorder</name>
+	<description>Audizz Audio Recorder Plugin</description>
+	<author>peryaudo</author>
+	<license>MIT</license>
+	<keywords>audio,recorder</keywords>
+	<repo>https://github.com/peryaudo/audizz-recorder.git</repo>
+	<js-module src="www/audizz-recorder.js" name="AudizzRecorder">
+		<clobbers target="window.AudizzRecorder" />
+	</js-module>
+
+	<!-- android -->
+	<platform name="android">
+		<config-file target="res/xml/config.xml" parent="/*">
+			<feature name="AudizzRecorderPlugin">
+				<param name="android-package" value="com.audizz.cordova.recorder.AudizzRecorderPlugin" />
+			</feature>
+		</config-file>
+
+		<source-file src="src/android/AudizzRecorderPlugin.java" target-dir="src/com/audizz/cordova/recorder" />
+		<config-file target="AndroidManifest.xml" parent="/*">
+			<uses-permission android:name="android.permission.RECORD_AUDIO" />
+		</config-file>
+	</platform>
+</plugin>
