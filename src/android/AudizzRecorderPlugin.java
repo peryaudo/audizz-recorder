@@ -53,12 +53,12 @@ public class AudizzRecorderPlugin extends CordovaPlugin {
 
 		try {
 			recorder.prepare();
+			recorder.start();
 		} catch (IOException e) {
+			e.printStackTrace();
 			Log.d("AudizzRecorderPlugin", "MediaRecorder Error: Can't prepare.");
 			return;
 		}
-
-		recorder.start();
 	}
 
 	public byte[] stop(String id) {
@@ -68,6 +68,7 @@ public class AudizzRecorderPlugin extends CordovaPlugin {
 		}
 
 		recorder.stop();
+		recorder.reset();
 		recorder.release();
 
 		byte[] content = null;
@@ -77,6 +78,7 @@ public class AudizzRecorderPlugin extends CordovaPlugin {
 			file.read(content);
 			file.close();
 		} catch (IOException e) {
+			e.printStackTrace();
 			Log.d("AudizzRecorderPlugin", "RandomAccessFile Error: Can't read temp file.");
 		}
 		return content;
