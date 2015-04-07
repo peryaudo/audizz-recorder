@@ -4,6 +4,8 @@ import android.media.MediaRecorder;
 import android.net.Uri;
 import android.util.Log;
 import android.view.WindowManager;
+import android.media.AudioManager;
+import android.content.Context;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.PluginResult;
@@ -69,6 +71,9 @@ public class AudizzRecorderPlugin extends CordovaPlugin {
 
 		this.cordova.getActivity().runOnUiThread(new Runnable() {
 			public void run() {
+				AudioManager am = (AudioManager) AudizzRecorderPlugin.this.cordova.getActivity().getSystemService(Context.AUDIO_SERVICE);
+				am.setParameters("noise_suppression=off");
+
 				AudizzRecorderPlugin.this.cordova.getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 			}
 		});
@@ -77,6 +82,9 @@ public class AudizzRecorderPlugin extends CordovaPlugin {
 	public byte[] stop(String id) {
 		this.cordova.getActivity().runOnUiThread(new Runnable() {
 			public void run() {
+				AudioManager am = (AudioManager) AudizzRecorderPlugin.this.cordova.getActivity().getSystemService(Context.AUDIO_SERVICE);
+				am.setParameters("noise_suppression=auto");
+
 				AudizzRecorderPlugin.this.cordova.getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 			}
 		});
